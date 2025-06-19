@@ -8,22 +8,57 @@ export default function App() {
       time: "20 mins",
       ingredients: "Pasta, Tomato, Garlic, Chili",
       steps: "Boil pasta, Cook sauce, Mix and serve",
-      image: "https://source.unsplash.com/300x200/?pasta"
+      image: "https://theplantbasedschool.com/wp-content/uploads/2024/01/Penne-with-arrabbiata-sauce-4.jpg"
     },
     {
       name: "Paneer Butter Masala",
       time: "30 mins",
       ingredients: "Paneer, Butter, Tomato, Spices",
       steps: "Cook tomato base, Add paneer, Simmer",
-      image: "https://source.unsplash.com/300x200/?paneer"
+      image: "https://www.indianhealthyrecipes.com/wp-content/uploads/2014/11/paneer-butter-masala-recipe-2.jpg"
     },
     {
       name: "Veg Pulao",
       time: "25 mins",
       ingredients: "Rice, Vegetables, Spices, Ghee",
       steps: "Cook veggies, Add rice, Steam and serve",
-      image: "https://source.unsplash.com/300x200/?pulao"
-    }
+      image: "https://www.indianhealthyrecipes.com/wp-content/uploads/2018/07/pulao-recipe.jpg"
+    },
+    {
+      name: "Spaghetti Agilo e Olio (Garlic & Oil Pasta)",
+      time: "15 mins",
+      ingredients: "Spaghetti, olive oil, garlic, red chilli flakes, parsley",
+      steps: "Cook spaghetti, Sauté garlic and chili flakes in olive oil., Toss pasta into it and garnish with parsley",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ_8w9y_wUz517Gaz8huMjp30gbD6QSrgV7OA&s"
+    },
+    {
+      name: "Chicken Quesadilla",
+      time: "20 mins",
+      ingredients: "Torilla,cooked chicken, chesse, bell peppers, onion",
+      steps: "Fill tortilla with chicken,cheese and veggies, Fold and pen-grill until crispy and cheese melts, Serve with salsa or sour cream",
+      image: "https://img.taste.com.au/0Kl93Czc/taste/2016/11/chicken-quesadillas-with-avocado-cream-5354-1.jpeg"
+    },
+    {
+      name: "Veggie Tacos",
+      time: "20 mins",
+      ingredients: "Torilla,black beans, corn, avocado, salsa, cheese",
+      steps: "Warm tortillas, Fill with sautéed beans/corn, top with salsa avocado cheese.",
+      image: "https://www.connoisseurusveg.com/wp-content/uploads/2025/02/veggie-tacos-sq-2.jpg"
+    },
+    {
+      name: "Margherita Pizza",
+      time: "30 mins",
+      ingredients: "Pizza dough, tomato sauce, mozzarella, basil, olive oil",
+      steps: "Spread sauce on dough top with cheese and basil., Bake until cheese melts and crust is crisp",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSX2w-6ljxAJtEImAJ4zBsRnou1CoSAVmgvQw&s"
+    },
+    {
+      name: "Veg Hakka Noodles",
+      time: "25 mins",
+      ingredients: "Noodles, cabbage, carrot, capsicum, soy sauce, garlic",
+      steps: "Boil noodles, rinse in cold water.Stir-fry garlic and veggies, add sauces. Toss in noodles and stir-fry 2–3 mins.",
+      image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbphFTBemK-YW-qKHvMtOE5b21r_pRWM8Bxg&s"
+    },
   ]);
 
   const [search, setSearch] = useState("");
@@ -36,6 +71,8 @@ export default function App() {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const recipePerPage = 3;
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -72,6 +109,13 @@ export default function App() {
   const filteredRecipes = recipes.filter((recipe) =>
     recipe.name.toLowerCase().includes(search.toLowerCase())
   );
+
+  const indexOfLastRecipes = currentPage * recipePerPage;
+  const indexOfFirstRecipes = indexOfLastRecipes - recipePerPage;
+  const currentRecipes = filteredRecipes.slice(indexOfFirstRecipes, indexOfLastRecipes);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
 
   return (
     <div className="container">
@@ -129,8 +173,10 @@ export default function App() {
       </form>
 
       <div className="cardContainer">
-        {filteredRecipes.map((recipe, index) => (
-          <div key={index} className="card">
+        {currentRecipes.map((recipe, index) => {
+          const globalIndex = index + (currentPage - 1) * recipePerPage;
+          return (
+          <div key={globalIndex} className="card">
             <img
               src={
                 recipe.image || "https://via.placeholder.com/300x200?text=Recipe"
@@ -153,12 +199,25 @@ export default function App() {
               ))}
             </ol>
             <div className="cardButtons">
-              <button onClick={() => handleEdit(index)} className="editBtn">Edit</button>
-              <button onClick={() => handleDelete(index)} className="deleteBtn">Delete</button>
+              <button onClick={() => handleEdit(globalIndex)} className="editBtn">Edit</button>
+              <button onClick={() => handleDelete(globalIndex)} className="deleteBtn">Delete</button>
             </div>
           </div>
-        ))}
+        );
+      })}
       </div>
+      {/* Pagination */}
+    <div className="pagination">
+      {Array.from({ length: Math.ceil(filteredRecipes.length / recipePerPage) }).map((_, index) => (
+        <button
+        key={index}
+        onClick={() => paginate(index+1)}
+        className={`paginationBtn ${currentPage === index + 1 ? "active" : ""}`}
+        >
+          {index + 1}
+        </button>
+      ))}
+    </div>
     </div>
   );
 }
