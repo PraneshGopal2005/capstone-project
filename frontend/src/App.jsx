@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./styles.css";
+import "./style.css";
 
 export default function App() {
   const [recipes, setRecipes] = useState([
