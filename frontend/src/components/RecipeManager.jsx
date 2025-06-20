@@ -71,6 +71,7 @@ export default function App() {
   });
   const [isEditing, setIsEditing] = useState(false);
   const [editingIndex, setEditingIndex] = useState(null);
+  const [showForm, setShowForm] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const recipePerPage = 3;
 
@@ -121,6 +122,15 @@ export default function App() {
     <div className="container">
       <h1 className="title">🍽️ Recipe Sharing Platform</h1>
 
+      <button
+        className="topRightAddBtn"
+        onClick={() => {
+          setIsEditing(false);
+          setFormData({ name: "", time: "", ingredients: "", steps: "", image: "" });
+          setShowForm(true);
+        }}
+      >Add Recipe</button>
+
       <input
         type="text"
         placeholder="Search recipes..."
@@ -128,7 +138,7 @@ export default function App() {
         value={search}
         onChange={(e) => setSearch(e.target.value)}
       />
-
+    {showForm && (
       <form className="recipeForm" onSubmit={handleAddOrUpdate}>
         <input
           type="text"
@@ -171,6 +181,7 @@ export default function App() {
           {isEditing ? "Update Recipe" : "Add Recipe"}
         </button>
       </form>
+    )}
 
       <div className="cardContainer">
         {currentRecipes.map((recipe, index) => {
