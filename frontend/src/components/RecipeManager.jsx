@@ -243,7 +243,7 @@ export default function RecipeManager() {
       <div className="cardContainer">
         {currentRecipes.map((recipe) => (
           
-          <div key={recipe_id} className="card">
+          <div key={recipe._id} className="card">
             <img
               src={
                 recipe.image || "https://via.placeholder.com/300x200?text=Recipe"
@@ -262,7 +262,7 @@ export default function RecipeManager() {
             <p><strong>Steps:</strong></p>
             <ol>
               {recipe.steps.split(",").map((s, idx) => (
-                <li key={i}>{s.trim()}</li>
+                <li key={idx}>{s.trim()}</li>
               ))}
             </ol>
             <div className="cardButtons">
