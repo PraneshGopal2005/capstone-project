@@ -1,18 +1,3 @@
-/*const jwt = require('jsonwebtoken')
-const SEC = process.env.JWT_SECRET
-
-module.exports = (r, s, n) => {
-  const h = r.headers.authorization
-  if (!h || !h.startsWith('Bearer ')) return s.status(401).json({ e: 'no' })
-
-  const t = h.split(' ')[1]
-  try {
-    r.u = jwt.verify(t, SEC)
-    n()
-  } catch {
-    s.status(401).json({ e: 'bad' })
-  }
-}*/
 
 const jwt = require('jsonwebtoken');
 const SEC = process.env.JWT_SECRET;
@@ -28,7 +13,7 @@ module.exports = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, SEC);
-    req.u = decoded; // attach decoded user info to request
+    req.u = decoded; 
     next();
   } catch (err) {
     console.error("JWT verification failed:", err.message);

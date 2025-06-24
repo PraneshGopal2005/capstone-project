@@ -1,22 +1,12 @@
-const U   = require('../models/User')
-const bc  = require('bcryptjs')
-const jwt = require('jsonwebtoken')
-const send = require('../utils/mailer')
+const U   = require('../models/User');
+const bc  = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const send = require('../utils/mailer');
 
 const SEC  = process.env.JWT_SECRET
 const RSEC = process.env.JWT_RESET_SECRET
 const REXP = process.env.RESET_TOKEN_EXPIRY || '15m'
 
-/*exports.reg = async (r, s) => {
-  const { un, email, pw } = r.body
-  const ex = await U.findOne({ em: email })
-  if (ex) return s.status(400).json({ e: 'exists' })
-
-  const h  = await bc.hash(pw, 10)
-  const u  = new U({ un, em: email, pw: h })
-  await u.save()
-  s.status(201).json({ m: 'ok' })
-}*/
 
 exports.reg = async (req, res) => {
   try {
@@ -51,55 +41,43 @@ exports.reg = async (req, res) => {
 };
 
 
-/*exports.login = async (r, s) => {
-  const { email, pw } = r.body
-  const u = await U.findOne({ em: email })
-  if (!u) return s.status(400).json({ e: 'bad' })
-
-  const v = await bc.compare(pw, u.pw)
-  if (!v) return s.status(401).json({ e: 'bad' })
-
-  const t = jwt.sign({ id: u._id, rl: u.rl }, SEC, { expiresIn: '1h' })
-  s.json({ t })
-}*/
-
-exports.login = async (r, s) => {
-  const { email, pw } = r.body;
-  if (!email || !pw) return s.status(400).json({ e: "Missing credentials" });
+exports.login = async (req, res) => {
+  const { email, pw } = req.body;
+  if (!email || !pw) return res.status(400).json({ e: "Missing credentials" });
 
   const u = await U.findOne({ em: email });
-  if (!u) return s.status(400).json({ e: "Invalid email" });
+  if (!u) return res.status(400).json({ e: "Invalid email" });
 
   const v = await bc.compare(pw, u.pw);
-  if (!v) return s.status(401).json({ e: "Invalid password" });
+  if (!v) return res.status(401).json({ e: "Invalid password" });
 
   const t = jwt.sign({ id: u._id, rl: u.rl }, SEC, { expiresIn: '1h' });
-  s.json({ t });
+  res.json({ t });
 };
 
 
 
-exports.forgot = async (r, s) => {
-  const { email } = r.body
-  const u = await U.findOne({ em: email })
-  if (!u) return s.status(400).json({ e: 'no' })
+exports.forgot = async (req, res) => {
+  const { email } = req.body;
+  const u = await U.findOne({ em: email });
+  if (!u) return res.status(400).json({ e: 'no' });
 
-  const tok = jwt.sign({ id: u._id }, RSEC, { expiresIn: REXP })
-  const url = `${process.env.FRONT_URL}/reset-password/${tok}`
+  const tok = jwt.sign({ id: u._id }, RSEC, { expiresIn: REXP });
+  const url = `${process.env.FRONT_URL}/reset-password/${tok}`;
 
-  await send(email, 'reset', `<a href="${url}">reset</a>`)
-  s.json({ m: 'sent' })
-}
+  await send(email, 'reset', `<a href="${url}">reset</a>`);
+  res.json({ m: 'sent' });
+};
 
-exports.reset = async (r, s) => {
-  const { token } = r.params
-  const { pw }   = r.body
+exports.reset = async (req, res) => {
+  const { token } = req.params;
+  const { pw }   = req.body;
   try {
-    const d = jwt.verify(token, RSEC)
-    const h = await bc.hash(pw, 10)
-    await U.findByIdAndUpdate(d.id, { pw: h })
-    s.json({ m: 'ok' })
+    const d = jwt.verify(token, RSEC);
+    const h = await bc.hash(pw, 10);
+    await U.findByIdAndUpdate(d.id, { pw: h });
+    s.json({ m: 'ok' });
   } catch {
-    s.status(400).json({ e: 'bad' })
+    s.status(400).json({ e: 'bad' });
   }
-}
+};
