@@ -52,7 +52,7 @@ function Login() {
         />
         <button type="submit">Login</button>
       </form>
-       {/* 🔁 Link to Register */}
+       {/* Link to Register */}
     <p className="switchAuth">
       Don't have an account? <Link to="/register">Register</Link>
     </p>

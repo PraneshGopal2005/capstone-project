@@ -8,7 +8,7 @@ function Register() {
   const [formData, setFormData] = useState({
     username: "",
     email: "",
-    password: "" // ✅ changed from 'pw' to 'password'
+    password: "" 
   });
   const [error, setError] = useState("");
 
@@ -51,7 +51,7 @@ function Register() {
         />
         <input
           type="password"
-          name="password" // ✅ changed from 'pw' to 'password'
+          name="password" 
           placeholder="Password"
           value={formData.password}
           onChange={handleChange}
