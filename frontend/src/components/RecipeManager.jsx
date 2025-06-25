@@ -100,6 +100,8 @@ export default function RecipeManager() {
   const indexOfFirst = indexOfLast - recipePerPage;
   const currentRecipes = filteredRecipes.slice(indexOfFirst, indexOfLast);
   const paginate = (page) => setCurrentPage(page);
+  console.log("RecipeManager Rendered");
+
 
   return (
     <div className="container">
