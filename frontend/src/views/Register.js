@@ -1,9 +1,10 @@
+// src/views/Register.jsx
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Auth.css";
 
-const baseURL = process.env.REACT_APP_API_BASE;
+const baseURL = "https://capstone-project-gjvr.onrender.com";
 
 function Register() {
   const navigate = useNavigate();
