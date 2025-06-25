@@ -1,15 +1,15 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./views/Login";
 import Register from "./views/Register";
-import RecipeManager from "./components/RecipeManager";
+import Dashboard from "./views/Dashboard";
 
 function App() {
   return (
     <Router>
       <Routes>
-        {/* This makes sure root "/" redirects to /recipes */}
-        <Route path="/" element={<Navigate to="/recipes" />} />
-        <Route path="/recipes" element={<RecipeManager />} />
+        {/* Redirect root path to /dashboard */}
+        <Route path="/" element={<Navigate to="/dashboard" />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>
