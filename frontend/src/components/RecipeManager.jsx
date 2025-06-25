@@ -3,7 +3,7 @@ import axios from "axios";
 import { Link } from "react-router-dom";
 import "./RecipeManager.css";
 
-const baseURL = "https://capstone-project-gjvr.onrender.com";
+const baseURL = process.env.REACT_APP_API_BASE;
 
 export default function RecipeManager() {
   const [recipes, setRecipes] = useState([]);

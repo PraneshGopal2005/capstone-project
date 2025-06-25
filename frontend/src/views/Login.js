@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import "./Auth.css";
 
-const baseURL = "https://capstone-project-gjvr.onrender.com";
+const baseURL = process.env.REACT_APP_API_BASE;
 
 function Login() {
   const navigate = useNavigate();
