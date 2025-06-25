@@ -1,24 +1,19 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import Login from "./views/Login";
-import Register from "./views/Register";
-import RecipeManager from "./components/RecipeManager";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import RecipeManager from "../components/RecipeManager";
 
-function App() {
-  return (
-    <Router>
-      <Routes>
-        {/* 👇 Default route opens Dashboard */}
-        <Route path="/" element={<RecipeManager />} />
+function Dashboard() {
+  const navigate = useNavigate();
 
-        {/* 👇 Auth Routes */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      // Optional: redirect unauthenticated users to login
+      navigate("/login");
+    }
+  }, [navigate]);
 
-        {/* 👇 Optional redirect if someone manually types /recipes */}
-        <Route path="/recipes" element={<Navigate to="/" />} />
-      </Routes>
-    </Router>
-  );
+  return <RecipeManager />;
 }
 
-export default App;
+export default Dashboard;
