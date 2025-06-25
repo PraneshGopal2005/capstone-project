@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "../Auth.css";
+import "/Auth.css";
 
 const baseURL = "https://capstone-project-gjvr.onrender.com";
 
