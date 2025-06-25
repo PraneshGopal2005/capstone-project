@@ -20,6 +20,7 @@ export default function RecipeManager() {
   const [currentPage, setCurrentPage] = useState(1);
   const recipePerPage = 3;
 
+
   useEffect(() => {
   const fetchRecipes = async () => {
     try {
