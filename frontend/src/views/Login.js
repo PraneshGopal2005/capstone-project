@@ -1,15 +1,13 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "./Auth.css";
-import { Link } from "react-router-dom";
+import "../Auth.css";
+
+const baseURL = "https://capstone-project-gjvr.onrender.com";
 
 function Login() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    email: "",
-    pw: ""
-  });
+  const [formData, setFormData] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
 
   const handleChange = e => {
@@ -18,45 +16,24 @@ function Login() {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    setError("");
-
     try {
-      const res = await axios.post("http://localhost:5000/auth/login", formData);
-      localStorage.setItem("token", res.data.t);
+      const res = await axios.post(`${baseURL}/auth/login`, formData);
+      localStorage.setItem("token", res.data.token);
       navigate("/recipes");
     } catch (err) {
-      const msg = err.response?.data?.e || "Login failed";
-      setError(msg);
+      setError(err.response?.data?.message || "Login failed");
     }
   };
 
   return (
-    <div className="authContainer">
+    <div className="auth-container">
       <h2>Login</h2>
-      <form onSubmit={handleSubmit} className="authForm">
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={formData.email}
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="password"
-          name="pw"
-          placeholder="Password"
-          value={formData.pw}
-          onChange={handleChange}
-          required
-        />
+      <form onSubmit={handleSubmit}>
+        <input type="email" name="email" placeholder="Email" onChange={handleChange} required />
+        <input type="password" name="password" placeholder="Password" onChange={handleChange} required />
         <button type="submit">Login</button>
+        {error && <p className="error">{error}</p>}
       </form>
-       {/* Link to Register */}
-    <p className="switchAuth">
-      Don't have an account? <Link to="/register">Register</Link>
-    </p>
-      {error && <p className="errorMsg">{error}</p>}
     </div>
   );
 }
